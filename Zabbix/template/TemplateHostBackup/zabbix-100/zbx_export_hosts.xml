@@ -23028,7 +23028,7 @@
                 </macro>
                 <macro>
                     <macro>{$PROCESS_NAME5}</macro>
-                    <value>GTA.CSMAR.Web.ExportSSISWSHost.exe</value>
+                    <value>.CSMAR.Web.ExportSSISWSHost.exe</value>
                 </macro>
             </macros>
             <inventory/>
@@ -23252,7 +23252,7 @@
                 </macro>
                 <macro>
                     <macro>{$PROCESS_NAME7}</macro>
-                    <value>GTA.CSMAR.Web.ExportSSISWSHost.exe</value>
+                    <value>.CSMAR.Web.ExportSSISWSHost.exe</value>
                 </macro>
             </macros>
             <inventory/>
@@ -23358,7 +23358,7 @@
                 </macro>
                 <macro>
                     <macro>{$PROCESS_NAME6}</macro>
-                    <value>GTA.CSMAR.Web.ExportSSISWSHost.exe</value>
+                    <value>.CSMAR.Web.ExportSSISWSHost.exe</value>
                 </macro>
             </macros>
             <inventory/>
@@ -23411,7 +23411,7 @@
                 </macro>
                 <macro>
                     <macro>{$PROCESS_NAME4}</macro>
-                    <value>GTA.CSMAR.Web.ExportSSISWSHost.exe</value>
+                    <value>.CSMAR.Web.ExportSSISWSHost.exe</value>
                 </macro>
                 <macro>
                     <macro>{$PROCESS_NAME5}</macro>
@@ -31809,7 +31809,7 @@
                 </macro>
                 <macro>
                     <macro>{$PROCESS_NAME4}</macro>
-                    <value>MPKDataR_GTA.exe</value>
+                    <value>MPKDataR_.exe</value>
                 </macro>
                 <macro>
                     <macro>{$PROCESS_NAME5}</macro>
@@ -37763,7 +37763,7 @@
                 </macro>
                 <macro>
                     <macro>{$SERVICE_NAME3}</macro>
-                    <value>SQL Server (GTA)</value>
+                    <value>SQL Server ()</value>
                 </macro>
             </macros>
             <inventory/>
