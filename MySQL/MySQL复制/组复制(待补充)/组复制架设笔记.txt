@@ -1,0 +1,59 @@
+mysqld --defaults-file=/data/mysql/mysql3306/my3306.cnf --initialize-insecure 
+mysqld --defaults-file=/data/mysql/mysql3307/my3307.cnf --initialize-insecure 
+mysqld --defaults-file=/data/mysql/mysql3308/my3308.cnf --initialize-insecure 
+
+mysqld --defaults-file=/data/mysql/mysql3306/my3306.cnf &
+mysqld --defaults-file=/data/mysql/mysql3307/my3307.cnf &
+mysqld --defaults-file=/data/mysql/mysql3308/my3308.cnf &
+
+
+gtid_mode=ON
+enforce_gtid_consistency=ON
+master_info_repository=TABLE
+relay_log_info_repository=TABLE
+binlog_checksum=NONE
+log_slave_updates=ON
+binlog_format=ROW
+transaction_write_set_extraction=XXHASH64
+loose-group_replication_group_name="aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa"
+loose-group_replication_start_on_boot=off
+loose-group_replication_local_address="10.1.134.128:23306"
+loose-group_replication_group_seeds="10.1.134.128:23306,10.1.134.128:23307,10.1.134.128:23308"
+loose-group_replication_bootstrap_group=off
+
+loose-group_replication_single_primary_mode=off
+loose-group_replication_enforce_update_everywhere_checks=on
+---------------------
+
+SET SQL_LOG_BIN=0;
+CREATE USER 'rpl_user'@'%';
+GRANT REPLICATION SLAVE ON *.* TO 'rpl_user'@'%' IDENTIFIED BY 'zhishuedu';
+SET SQL_LOG_BIN=1;
+CHANGE MASTER TO MASTER_USER='rpl_user',MASTER_PASSWORD='zhishuedu' FOR CHANNEL 'group_replication_recovery';
+
+INSTALL PLUGIN group_replication SONAME 'group_replication.so';
+
+show plugins;
+
+SET GLOBAL group_replication_bootstrap_group=on;  #####只在第一个节点使用
+start group_replication;
+
+确认节点加入情况
+select * from performance_schema.replication_group_members;
+
+创建点测试数据:
+create database zhishuedu;
+use zhishuedu;
+create table wubx(id int not null,name varchar(32),primary key(id));
+insert into wubx(id,name) values(1,'zhishuedu.com');
+
+加入第二个节点
+SET SQL_LOG_BIN=0;
+CREATE USER 'rpl_user'@'%';
+GRANT REPLICATION SLAVE ON *.* TO 'rpl_user'@'%' IDENTIFIED BY 'zhishuedu';
+SET SQL_LOG_BIN=1;
+CHANGE MASTER TO MASTER_USER='rpl_user',MASTER_PASSWORD='zhishuedu' FOR CHANNEL 'group_replication_recovery';
+
+INSTALL PLUGIN group_replication SONAME 'group_replication.so';
+set global group_replication_allow_local_disjoint_gtids_join=ON;
+start group_replication;

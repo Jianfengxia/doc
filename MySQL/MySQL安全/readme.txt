@@ -1,0 +1,2 @@
+    As more sensitive data is collected, stored and used online, database auditing becomes an essential component of any security strategy. 
+    MySQL Enterprise Edition provide audit function,but we are using MySQL Community Edition,so we have to study how to install the third party audit plug-in.To learn more about Audit,see the document.

@@ -1,0 +1,40 @@
+#MyISAM表才要设置，参考http://www.jb51.net/article/85310.htm，created_tmp_disk_tables=0，并且只有innodb表就没必要调整这个地方的值了
+#key_buffer_size=16M
+#默认才4M，建议还是改一下，参考智慧校园
+max_allowed_packet = 16M
+#默认是2000，够用，暂时没有觉得有必要调小为512。http://bbs.csdn.net/topics/330165438，可以show global status like '%open%file%';
+show VARIABLES like '%table_open_cache%'对比。
+#table_open_cache = 512
+#sort_buffer_size是session级参数，连接数大，会导致他增大很厉害，所以不是越大越好。默认125K。http://www.linuxyw.com/linux/shujuku/20130506/216.html
+sort_buffer_size = 2M
+read_buffer_size = 2M
+read_rnd_buffer_size = 8M
+myisam_sort_buffer_size = 32M
+thread_cache_size = 8
+query_cache_size = 32M
+#innodb_thread_concurrencymysql5.5后，默认值是0，代表不限制并发数，推荐使用0
+#innodb_thread_concurrency = 16
+#innodb_buffer_pool_size建议设置总内存的60%-80%
+innodb_buffer_pool_size = 6G
+#innodb_additional_mem_pool_size，MySQL 5.7.4已遗弃这个参数，不需要设置
+#innodb_additional_mem_pool_size = <value>
+#默认100M，建议设置1G就够了。innodb_log_file_size官方文档的建议设置是innodb_buffer_pool_size/innodb_log_files_in_group。这里就是6/2=3，不过设置太大会导致数据库崩溃时异常恢复时间过长。修改这个值后要移除ib_logfile文件
+innodb_log_file_size = 1G
+#该变量将数据存导入到内存中，可以减少大量的IO资源消耗。当事务提交时，保存脏数据，后续在刷新到磁盘。当我们调整innodb_buffer_pool_size大小时，innodb_log_buffer_size和innodb_log_file_size也应该做出相应的调整
+innodb_log_buffer_size = 64
+#双1
+innodb_flush_log_at_trx_commit = 1
+sync_binlog = 1
+#本身就默认50
+#innodb_lock_wait_timeout = 50
+#传说是75好呀，默认就是75
+innodb_max_dirty_pages_pct= 75
+innodb_file_per_table
+#--它限制了一次有多少线程能进入内核,0表示不限制进入内核的数量。还是不要限制吧。默认就是0，不限制。
+#innodb_thread_concurrency=<value>
+#innodb_buffer_pool_instances 参数显著的影响测试结果，特别是非常高的 I/O 负载时.实验环境下， innodb_buffer_pool_instances=8 在很小的 buffer_pool 大小时有很大的不同，而使用大的 buffer_pool 时，innodb_buffer_pool_instances=1 的表现最棒。默认就是1
+innodb_buffer_pool_instances=1
+
+
+操作系统优化:
+http://blog.csdn.net/gedongdong2000/article/details/51996392

@@ -1,0 +1,82 @@
+测试版本11.2
+需要备份的服务器:192.168.1.101
+备份专用服务器:localhost
+
+下载zip包
+instantclient-basic-linux.x64-11.2.0.4.0.zip
+instantclient-jdbc-linux.x64-11.2.0.4.0.zip
+instantclient-sdk-linux.x64-11.2.0.4.0.zip
+instantclient-sqlplus-linux.x64-11.2.0.4.0.zip
+
+解压
+unzip instantclient-basic-linux.x64-11.2.0.4.0.zip
+unzip instantclient-jdbc-linux.x64-11.2.0.4.0.zip
+unzip instantclient-sdk-linux.x64-11.2.0.4.0.zip
+unzip instantclient-sqlplus-linux.x64-11.2.0.4.0.zip
+
+mkdir -p /usr/local/oracle
+mv instantclient_11_2 /usr/local/oracle
+
+配置环境变量
+vim /etc/profile
+
+export ORACLE_HOME=/usr/local/oracle
+export NLS_LANG=AMERICAN_AMERICA.ZHS16GBK
+export ORACLE_IC_HOME=/usr/local/oracle/instantclient_11_2
+export ORACLE_HOME=$ORACLE_IC_HOME
+export TNS_ADMIN=$ORACLE_IC_HOME
+export PATH=$PATH:$HOME/bin:$ORACLE_IC_HOME
+export LD_LIBRARY_PATH=$ORACLE_IC_HOME:/usr/lib
+export ORACLE_SID=test
+ 
+source /etc/profile
+
+配置tnsping工具（测试能不能连，也可以不用配）
+cd /usr/local/oracle/instantclient_11_2
+scp root@192.168.1.101:/oracle/app/oracle/product/11.2/db_1/bin/tnsping ./ 
+
+mkdir -p network/mesg
+scp root@192.168.1.101:/oracle/app/oracle/product/11.2/db_1/network/mesg/tnsus.msb ./ 
+
+
+配置imp,exp工具
+scp root@192.168.1.101:/oracle/app/oracle/product/11.2/db_1/bin/imp ./
+scp root@192.168.1.101:/oracle/app/oracle/product/11.2/db_1/bin/emp ./
+
+scp root@192.168.1.101:/oracle/app/oracle/product/11.2/db_1/rdbms/mesg/impus.msb ./
+
+scp root@192.168.1.101:/oracle/app/oracle/product/11.2/db_1/rdbms/mesg/expus.msb ./
+
+
+配置tns
+vi tnsnames.ora
+test =
+  (DESCRIPTION =
+    (ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.1.101)(PORT = 1521))
+    (CONNECT_DATA =
+      (SERVER = DEDICATED)
+      (SERVICE_NAME = test) 
+    )
+  )
+
+
+sqlplus测试
+sqlplus scott/123456@test
+#报错，可以通过修改/etc/ld.so.conf.d/oracle.conf添加oracle的lib路径后ldconfig解决
+echo "/usr/local/oracle/instantclient_11_2/" > /etc/ld.so.conf.d/oracle.conf
+ldconfig
+
+
+导出测试
+exp scott/123456@test file=/home/oracle/test.dmp owner=scott
+
+
+
+
+
+
+
+
+
+
+

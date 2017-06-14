@@ -1,0 +1,29 @@
+#装mysql
+wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-5.7.17-linux-glibc2.5-x86_64.tar.gz
+mkdir -p /opt/mysql
+tar zxvf mysql-5.7.17-linux-glibc2.5-x86_64.tar.gz -C /opt/mysql/
+ln -s /opt/mysql/mysql-5.7.17-linux-glibc2.5-x86_64 /usr/local/mysql
+
+groupadd mysql
+useradd -M -g mysql -s /sbin/nologin -d /usr/local/mysql mysql
+
+#初始化实例
+mkdir -p /data/mysql/mysql3317/{data,logs,tmp}
+cp /etc/my.cnf /data/mysql/mysql3317/my3317.cnf
+vim /data/mysql/mysql3317/my3317.cnf
+(输入:%s/3306/3317/g  回车  :wq)
+chown mysql:mysql /data/mysql/mysql3317/ -R
+
+/usr/local/mysql/bin/mysqld --defaults-file=/data/mysql/mysql3317/my3317.cnf --initialize-insecure
+
+
+#启动实例
+mysqld --defaults-file=/data/mysql/mysql3317/my3317.cnf &
+
+
+
+
+
+
+
+

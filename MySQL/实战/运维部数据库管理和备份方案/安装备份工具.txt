@@ -1,0 +1,89 @@
+以蛇口备份服务器安装为例子
+一、环境准备
+准备一台CentOS7以上的纯净linux系统
+(CentOS7以上是硬性要求，因为sql server备份工具linux版的需要)
+关闭防火墙
+/bin/systemctl disable firewalld
+/bin/systemctl stop firewalld
+
+关闭selinux
+setenforce 0
+sed -i '/SELINUX/s/enforcing/disabled/' /etc/selinux/config
+
+
+二、安装四大关系数据库备份工具
+思路:解压对应工具
+#mysql
+cd /
+tar zxvf mysql.tgz
+
+#sql server
+http://jishu8.cc/2016/11/19/17/
+ln -s /opt/mssql-tools/ /usr/local/mssql
+#安装samba server
+yum install samba -y
+vim /etc/samba/smb.conf
+蛇口服务器:
+[global]
+  workgroup=WORKGROUP
+  server string=Samba Server
+  security=user
+  map to guest = Bad User
+[fander]
+  path=//shekoubackup
+  public=yes
+  writable=yes
+  browseable=yes
+  guest ok=yes
+
+南山服务器:
+[global]
+  workgroup=WORKGROUP
+  server string=Samba Server
+  security=user
+  map to guest = Bad User
+[fander]
+  path=/DATA1/nanshanbackup
+  public=yes
+  writable=yes
+  browseable=yes
+  guest ok=yes
+
+/bin/systemctl restart  smb.service
+
+#postgres
+1)解压工具包
+cd /
+tar zxvf pg.tgz
+2)解决连接授权问题
+pg_dump: [archiver (db)] connection to database "caiwufenxi" failed: 致命错误:  没有用于主机 "10.228.3.85", 用户 "postgres", 数据库 "caiwufenxi", SSL 关闭 的 pg_hba.conf 记录
+
+#oracle
+1)解压工具包
+cd /
+tar zxvf instantclient_11_2.tgz
+2)解决库文件libpq.so.5报错
+echo "/usr/local/oracle/instantclient_11_2/" > /etc/ld.so.conf.d/oracle.conf
+ldconfig
+
+
+三、设置脚本变量
+思路:大多数是修改路径变量
+
+
+四、设置邮箱smtp
+yum install mailx
+/etc/mail.rc 下添加
+set bsdcompat
+set from=OAM@fe.com
+set smtp=xxxx.com:587
+set smtp-auth-user=OAM
+set smtp-auth-password=!@sd505
+set smtp-auth=login
+
+
+
+
+
+
+

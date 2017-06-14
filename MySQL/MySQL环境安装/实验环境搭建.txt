@@ -1,0 +1,36 @@
+1.minimal-desktop安装centos(使用vmware的自动安装功能)
+
+2.网络设置nat模式(公司环境用nat模式，以便可以上网，家里环境使用桥接模式，以更好地模拟生产环境)
+
+3.IP地址配置(使用dhcp自动获取)
+
+4.linux设置
+#设置防火墙开机不启动
+chkconfig iptables off
+#关闭防火墙服务
+service iptables stop
+#关闭SELINUX
+setenforce 0
+#设置SELINUX开机不启动
+sed -i '/SELINUX/s/enforcing/disabled/' /etc/selinux/config
+#设置开机环境变量，使grep时带颜色
+echo "alias grep='grep --color=auto'" >> /etc/profile
+#重新载入环境变量
+source /etc/profile
+
+
+5.更换网易源
+配置网易yum源:
+替换/etc/yum.repos.d/CentOS-Base.repo
+
+6.安装一些好用工具或者依赖包
+#文件拷贝工具
+yum install lrzsz -y
+#安装telnet
+yum install telnet -y
+
+#安装mysql相关依赖包(最小化安装CentOS时要装)
+yum install libaio -y
+#安装wget(最小化安装CentOS时要装)
+yum install wget -y
+
