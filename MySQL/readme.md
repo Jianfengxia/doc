@@ -44,4 +44,9 @@ http://mysql-inception.github.io/inception-document/
 * Lepus数据库监控系统
 
 ## MySQL电子书 ##
-
+跟老男孩学Linux运维：Shell编程实战	老男孩	shell
+Beginning Database Design Solutions	Rod Stephens	数据库设计
+SQL必知必会(第4版)	Ben Forta 	SQL入门
+MySQL技术内幕：InnoDB存储引擎（第2版）	姜承尧	MySQL
+MySQL管理之道：性能调优、高可用与监控（第2版）	贺春旸	MySQL
+高性能MySQL(第3版)	国外多人	MySQL
